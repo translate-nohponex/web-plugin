@@ -65,8 +65,7 @@ $(document).ready( function() {
 
 		//Replace all language key data-i18-lang
 		lng = $( root ).find("[data-i18-lang]");
-		data.each(function( index, element ) {
-			console.log( 'index : ' + index );
+		lng.each(function( index, element ) {
 			var el = $( element );
 			el.text( language );
 		});
