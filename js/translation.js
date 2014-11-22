@@ -43,47 +43,64 @@
 		});
 	};
 
-	window.translate_page = function( root ){
-		root = typeof( root ) !== 'undefined' ? root : 'body';
+	/*var translation_text = function( key ){
+		return translation[ key ];
+	}*/
+	var translation_text = function( key, parameters ){
+		parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
 
-		data = $( root ).find( '[data-i18]');
-		console.log( data );
+		var t = translation[ key ];
+
+		//If parameters are set
+		if( parameters ){
+			for (var k in parameters ) {
+			  if (parameters.hasOwnProperty(k)){
+			  	t = t.replace( '%' + k + '%', parameters[k] );
+			  }
+			}
+		}
+
+		return t;
+	}
+
+	window.translate_page = function( parent_element ){
+		parent_element = typeof( parent_element ) !== 'undefined' ? parent_element : 'body';
+
+		var translatable_elements = $( parent_element ).find( '[data-i18]');
+		
+
+
 		//Replace all keys with the translated values
-		data.each(function( index, element ) {
-			console.log( 'index : ' + index );
+		translatable_elements.each(function( index, element ) {
+			//Get element object
 			var el = $( element );
-			key = el.attr( 'data-i18' );
+			//Get elements key
+			var key = el.attr( 'data-i18' );
+			//If key is set
 			if( key ){
-
-				console.log( 'key : ' + key );
-				t =  translation[key];
-				console.log( 'translation : ' + t );
-				console.log( t );
-				//if data 
-				d = el.attr( 'data-i18-data' );
-				if( d ){
-					d = jQuery.parseJSON(d);
-					for (var k in d) {
-					  if (d.hasOwnProperty(k)) {
-					  	console.log( key );
-					  	//replace
-					  	t=t.replace( '%' + k + '%', d[k] );
-					  	console.log( t );
-					    //alert(key + " -> " + p[key]);
-					  }
-					}
+												
+				//Translation parameters
+				var parameters = null;
+				if( el.attr( 'data-i18-data' ) ){
+					//Parse string as json object
+					parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
 				}
 
+				var t = translation_text( key, parameters );
+				//Replace element's text
 				el.text( t );
 			}
 		});
 
 		//Replace all language key data-i18-lang
-		lng = $( root ).find( '[data-i18-lang]' );
-		lng.each(function( index, element ) {
+		var translatable_language_elements = $( parent_element ).find( '[data-i18-lang]' );
+		translatable_language_elements.each(function( index, element ) {
 			var el = $( element );
 			el.text( language );
 		});
+
 	};
+
+	//Translate this page on load in greek language
 	translate( 'gr' );
 })();
