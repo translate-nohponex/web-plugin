@@ -3,19 +3,29 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>test</title>
+    <title data-i18="title">test</title>
+    <style>
+        span{
+            color: orange;
+            text-decoration: underline;
+        }
+    </style>
 
 </head>
 <body>
+    <div>
+        <button type="button" onclick="translate( 'gr' );">Language : gr</button> 
+        <button type="button" onclick="translate( 'en' );">Language : en</button> 
+        <hr/>
+    </div>
     <div class="container">
     	Language:
     	<span data-i18-lang></span> <br/>
-    	Player translation: 
+    	player translation: 
         <span data-i18="player">player</span> <br/>
         password translation:
         <span data-i18="password">password</span> <br/>
-
-        with variable translation:
+        hello translation using parameters:
         <span data-i18="hello" data-i18-data='{"username":"nohponex", "email" : "nohponex@gmail.com"}'></span> <br/>
     </div>
     

@@ -23,27 +23,27 @@
 
 }( jQuery ));*/
 
-$(document).ready( function() {
+(function() {
 	var language = '';
 	var translation = [];
 
 
 	//Request the translated data
-	var translate = function( ){
+	window.translate = function( lang ){
 		$.ajax({
 			dataType: "json",
-			url: 'http://translate.nohponex.gr/fetch/listing/?id=1&language=gr',
+			url: 'http://translate.nohponex.gr/fetch/listing/?id=1&language=' + lang ,
 			/*data: data,*/
 			success: function( data ){
 				//alert( data.language );
 				language = data.language;
 				translation =  data.translation;
-				translate_page();
+				translate_page( 'html' );
 			}
 		});
 	};
 
-	var translate_page = function( root ){
+	window.translate_page = function( root ){
 		root = typeof( root ) !== 'undefined' ? root : 'body';
 
 		data = $( root ).find( '[data-i18]');
@@ -85,5 +85,5 @@ $(document).ready( function() {
 			el.text( language );
 		});
 	};
-	translate();
-});
+	translate( 'gr' );
+})();
