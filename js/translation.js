@@ -18,8 +18,11 @@
 		this.translation = [];
 			
 
-		//Request the translated data
+		/**
+		  * Initialize 
+		  */
 		this.initialize = function( lang ){
+			lang = typeof( lang ) !== 'undefined' ? lang : this.parameters.language;
 			var me = this;
 
 			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang;
@@ -52,7 +55,7 @@
 					/*data: data,*/
 					success: function ( data ){
 						//Store as JSON string to session storage
-						sessionStorage.setItem( api_url, JSON.stringify( { language: data.language, translation : data.translation  } ) );
+						sessionStorage.setItem( api_url, JSON.stringify( { language: data.language, translation : data.translation, date : new Date() } ) );
 						
 						me.language = data.language;
 						me.translation = data.translation;
@@ -107,7 +110,7 @@
 		};
 
 
-		
+		this.initialize( )
 
 		//Initialize
 		//this;
@@ -116,6 +119,13 @@
 			parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
 
 			var t = this.translation[ key ];
+
+			//If translation is not set
+			if( !t ){
+				//TODO On missing key add request
+				return key;
+			}
+			
 
 			//If parameters are set
 			if( parameters ){
