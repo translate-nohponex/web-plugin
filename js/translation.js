@@ -1,106 +1,130 @@
-/*(function ( $ ) {
+(function($) {
 
-	var methods = {
-        init : function(options) {
+	$.fn.Translate = function( init ){
+		init = typeof( init ) !== 'undefined' ? init : {};
 
-        },
-        show : function( ) {    },// IS
-        hide : function( ) {  },// GOOD
-        update : function( content ) {  }// !!!
-    };
+		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null };
 
-    $.fn.translate = function(methodOrOptions) {
-        if ( methods[methodOrOptions] ) {
-            return methods[ methodOrOptions ].apply( this, Array.prototype.slice.call( arguments, 1 ));
-        } else if ( typeof methodOrOptions === 'object' || ! methodOrOptions ) {
-            // Default to "init"
-            return methods.init.apply( this, arguments );
-        } else {
-            $.error( 'Method ' +  methodOrOptions + ' does not exist on jQuery.tooltip' );
-        }    
-    };
-
-
-}( jQuery ));*/
-
-(function() {
-	var language = '';
-	var translation = [];
-
-
-	//Request the translated data
-	window.translate = function( lang ){
-		$.ajax({
-			dataType: "json",
-			url: 'http://translate.nohponex.gr/fetch/listing/?id=1&language=' + lang ,
-			/*data: data,*/
-			success: function( data ){
-				//alert( data.language );
-				language = data.language;
-				translation =  data.translation;
-				translate_page( 'html' );
-			}
-		});
-	};
-
-	/*var translation_text = function( key ){
-		return translation[ key ];
-	}*/
-	var translation_text = function( key, parameters ){
-		parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
-
-		var t = translation[ key ];
-
-		//If parameters are set
-		if( parameters ){
-			for (var k in parameters ) {
-			  if (parameters.hasOwnProperty(k)){
-			  	t = t.replace( '%' + k + '%', parameters[k] );
-			  }
-			}
+		//Parse init to parameters
+		for (var k in init ) {
+		  if ( init.hasOwnProperty( k ) && this.parameters.hasOwnProperty( k ) ){
+		  	this.parameters[ k ]  = init [ k ];
+		  }
 		}
 
-		return t;
-	}
+		//Current language
+		this.language = this.parameters.language;
+		//Current translation key : translation
+		this.translation = [];
+			
 
-	window.translate_page = function( parent_element ){
-		parent_element = typeof( parent_element ) !== 'undefined' ? parent_element : 'body';
+		//Request the translated data
+		this.initialize = function( lang ){
+			var me = this;
 
-		var translatable_elements = $( parent_element ).find( '[data-i18]');
+			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang;
+			//Check sessionStorage first
+			var temp = sessionStorage.getItem( api_url );
+			
+			if( typeof( temp ) !== 'undefined' && temp != null ){
+				
+				//Parse as json from session storage
+				try {
+        			temp = JSON.parse( temp );
+
+        			this.language = temp.language;
+					this.translation = temp.translation;
+
+					console.log( 'from cache..' );
+
+					this.translate_page( 'html' );
+        		}catch(e){
+        			temp = null;
+        		}
+				
+				
+			}
+			if( !temp ){
+				console.log( 'from http..' );
+				$.ajax({
+					dataType: "json",
+					url: api_url,
+					/*data: data,*/
+					success: function ( data ){
+						//Store as JSON string to session storage
+						sessionStorage.setItem( api_url, JSON.stringify( { language: data.language, translation : data.translation  } ) );
+						
+						me.language = data.language;
+						me.translation = data.translation;
+
+						me.translate_page( 'html' );
+					},
+					error: function( jqXHR, textStatus, errorThrown ){
+						console.log( jqXHR );
+						console.log( jqXHR.responseJSON.error );
+						console.log( textStatus );
+						console.log( errorThrown );
+					}
+				});
+			}
+		};
 		
 
+		this.translate_page = function( parent_element ){
+			parent_element = typeof( parent_element ) !== 'undefined' ? parent_element : 'body';
 
-		//Replace all keys with the translated values
-		translatable_elements.each(function( index, element ) {
-			//Get element object
-			var el = $( element );
-			//Get elements key
-			var key = el.attr( 'data-i18' );
-			//If key is set
-			if( key ){
-												
-				//Translation parameters
-				var parameters = null;
-				if( el.attr( 'data-i18-data' ) ){
-					//Parse string as json object
-					parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
+			var translatable_elements = $( parent_element ).find( '[data-i18]');
+			
+			var me = this;
+			//Replace all keys with the translated values
+			translatable_elements.each(function( index, element ) {
+				//Get element object
+				var el = $( element );
+				//Get elements key
+				var key = el.attr( 'data-i18' );
+				//If key is set
+				if( key ){
+													
+					//Translation parameters
+					var parameters = null;
+					if( el.attr( 'data-i18-data' ) ){
+						//Parse string as json object
+						parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
+					}
+					var t = me.translation_text( key, parameters );
+					//Replace element's text
+					el.text( t );
 				}
+			});
 
-				var t = translation_text( key, parameters );
-				//Replace element's text
-				el.text( t );
+			//Replace all language key data-i18-lang
+			var translatable_language_elements = $( parent_element ).find( '[data-i18-lang]' );
+			translatable_language_elements.each(function( index, element ) {
+				var el = $( element );
+				el.text( me.language );
+			});
+
+		};
+
+
+		
+
+		//Initialize
+		//this;
+	}
+	$.fn.Translate.prototype.translation_text = function( key, parameters ){
+			parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
+
+			var t = this.translation[ key ];
+
+			//If parameters are set
+			if( parameters ){
+				for (var k in parameters ) {
+				  if (parameters.hasOwnProperty(k)){
+				  	t = t.replace( '%' + k + '%', parameters[k] );
+				  }
+				}
 			}
-		});
-
-		//Replace all language key data-i18-lang
-		var translatable_language_elements = $( parent_element ).find( '[data-i18-lang]' );
-		translatable_language_elements.each(function( index, element ) {
-			var el = $( element );
-			el.text( language );
-		});
-
-	};
-
-	//Translate this page on load in greek language
-	translate( 'gr' );
-})();
+			return t;
+		}
+}( jQuery ));

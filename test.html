@@ -20,8 +20,8 @@
 </head>
 <body>
     <div>
-        <button type="button" onclick="translate( 'gr' );">Language : gr</button> 
-        <button type="button" onclick="translate( 'en' );">Language : en</button> 
+        <button type="button" onclick="window.translate.initialize( 'gr' );">Language : gr</button> 
+        <button type="button" onclick="window.translate.initialize( 'en' );">Language : en</button> 
         <hr/>
     </div>
     <div class="container">
@@ -38,5 +38,19 @@
     
     <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
     <script src="js/translation.js" type="text/javascript"></script>
+    <script type="text/javascript">
+    $(function() {
+        
+
+        /*var f= function ( t ){
+            var team_translation = t.translation_text( 'team' );
+            console.log( team_translation );
+        }*/
+        f = null;
+        //Translate this page on load in greek language
+        window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', onLoad : f } );
+        translate.initialize( 'gr' );
+    });
+    </script>
 </body>
 </html>
