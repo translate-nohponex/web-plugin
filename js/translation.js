@@ -25,11 +25,15 @@
 			lang = typeof( lang ) !== 'undefined' ? lang : this.parameters.language;
 			var me = this;
 
+			//API Request url //TODO ADD API_KEY
 			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang;
-			//Check sessionStorage first
-			var temp = sessionStorage.getItem( api_url );
+
+			//Check sessionStorage then localStorage first
+			var temp = ( 		  typeof( sessionStorage ) !== 'undefined' ) ? sessionStorage.getItem( api_url ) : null );
+				temp = ( !temp && typeof( localStorage )   !== 'undefined' ) ? localStorage.getItem( api_url )   : null );
 			
-			if( typeof( temp ) !== 'undefined' && temp != null ){
+			//Use cached translation
+			if( temp != null ){
 				
 				//Parse as json from session storage
 				try {
@@ -44,9 +48,9 @@
         		}catch(e){
         			temp = null;
         		}
-				
-				
 			}
+
+			//If cached translation is empty or parsing has failed
 			if( !temp ){
 				console.log( 'from http..' );
 				$.ajax({
