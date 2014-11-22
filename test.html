@@ -67,7 +67,7 @@
         }*/
         f = null;
         //Translate this page on load in greek language
-        window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', onLoad : f } );
+        window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', onLoad : f, translationStorageType : localStorage } );
         //translate.initialize( );
     });
     </script>

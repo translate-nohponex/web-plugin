@@ -3,7 +3,7 @@
 	$.fn.Translate = function( init ){
 		init = typeof( init ) !== 'undefined' ? init : {};
 
-		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null };
+		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null, translationStorageType : sessionStorage };
 
 		//Parse init to parameters
 		for (var k in init ) {
@@ -28,12 +28,16 @@
 			//API Request url //TODO ADD API_KEY
 			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang;
 
-			//Check sessionStorage then localStorage first
-			var temp = ( 		  typeof( sessionStorage ) !== 'undefined' ) ? sessionStorage.getItem( api_url ) : null );
-				temp = ( !temp && typeof( localStorage )   !== 'undefined' ) ? localStorage.getItem( api_url )   : null );
-			
+			//Check sessionStorage
+			var temp = ( typeof( sessionStorage ) !== 'undefined' ) ? sessionStorage.getItem( api_url ) : null;
+
+			//Check localStorage
+			if( !temp && typeof( localStorage ) !== 'undefined' ){
+				temp = localStorage.getItem( api_url ); 
+			}
+
 			//Use cached translation
-			if( temp != null ){
+			if( temp ){
 				
 				//Parse as json from session storage
 				try {
@@ -58,8 +62,11 @@
 					url: api_url,
 					/*data: data,*/
 					success: function ( data ){
-						//Store as JSON string to session storage
-						sessionStorage.setItem( api_url, JSON.stringify( { language: data.language, translation : data.translation, date : new Date() } ) );
+						//if storage type is set
+						if( me.parameters.translationStorageType ){
+							//Store as JSON string to storage
+							me.parameters.translationStorageType.setItem( api_url, JSON.stringify( { language: data.language, translation : data.translation, date : new Date() } ) );
+						}
 						
 						me.language = data.language;
 						me.translation = data.translation;
