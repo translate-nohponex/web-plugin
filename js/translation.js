@@ -26,7 +26,7 @@
 			var me = this;
 
 			//API Request url //TODO ADD API_KEY
-			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang;
+			var api_url = 'http://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang +'&api_key=' + this.parameters.API_KEY;
 
 			//Check sessionStorage
 			var temp = ( typeof( sessionStorage ) !== 'undefined' ) ? sessionStorage.getItem( api_url ) : null;
