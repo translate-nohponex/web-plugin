@@ -120,32 +120,49 @@
 
 		};
 
-
-		this.initialize( )
-
-		//Initialize
-		//this;
-	}
+        //Initialize
+		this.initialize( );
+	};
 	$.fn.Translate.prototype.translation_text = function( key, parameters ){
-			parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
+		parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
 
-			var t = this.translation[ key ];
+		var t = this.translation[ key ];
 
-			//If translation is not set
-			if( !t ){
-				//TODO On missing key add request
-				return key;
-			}
-			
-
-			//If parameters are set
-			if( parameters ){
-				for (var k in parameters ) {
-				  if (parameters.hasOwnProperty(k)){
-				  	t = t.replace( '%' + k + '%', parameters[k] );
-				  }
-				}
-			}
-			return t;
+		//If translation is not set
+		if( !t ){
+			//TODO On missing key add request
+			this.add_key( key );
+			return key;
 		}
+		
+
+		//If parameters are set
+		if( parameters ){
+			for (var k in parameters ) {
+			  if (parameters.hasOwnProperty(k)){
+			  	t = t.replace( '%' + k + '%', parameters[k] );
+			  }
+			}
+		}
+		return t;
+	};
+	$.fn.Translate.prototype.add_key = function( key ){
+	    var api_url = 'http://translate.nohponex.gr/fetch/create/?id=' + this.parameters.project_id +'&api_key=' + this.parameters.API_KEY + '&key=' + key;
+	    
+	    $.ajax({
+	        type: "POST",
+            dataType: "json",
+            url: api_url,
+            /*data: data,*/
+            success: function ( data ){
+                console.log( 'added' );
+            },
+            error: function( jqXHR, textStatus, errorThrown ){
+                console.log( jqXHR );
+                console.log( jqXHR.responseJSON.error );
+                console.log( textStatus );
+                console.log( errorThrown );
+            }
+        });
+	};
 }( jQuery ));
