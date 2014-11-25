@@ -123,6 +123,12 @@
         //Initialize
 		this.initialize( );
 	};
+	
+	/**
+     * Create a new key 
+     * @param {string} key
+     * @param {Object} parameters Optional
+     */
 	$.fn.Translate.prototype.translation_text = function( key, parameters ){
 		parameters = typeof( parameters ) !== 'undefined' ? parameters : null;
 
@@ -146,6 +152,11 @@
 		}
 		return t;
 	};
+	
+	/**
+	 * Create a new key 
+     * @param {string} key
+	 */
 	$.fn.Translate.prototype.add_key = function( key ){
 	    var api_url = 'http://translate.nohponex.gr/fetch/create/?id=' + this.parameters.project_id +'&api_key=' + this.parameters.API_KEY + '&key=' + key;
 	    
@@ -153,15 +164,9 @@
 	        type: "POST",
             dataType: "json",
             url: api_url,
-            /*data: data,*/
             success: function ( data ){
-                console.log( 'added' );
             },
-            error: function( jqXHR, textStatus, errorThrown ){
-                console.log( jqXHR );
-                console.log( jqXHR.responseJSON.error );
-                console.log( textStatus );
-                console.log( errorThrown );
+            error: function( jqXHR, textStatus, errorThrown ){                
             }
         });
 	};
