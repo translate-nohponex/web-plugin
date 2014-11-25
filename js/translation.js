@@ -106,8 +106,13 @@
 						parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
 					}
 					var t = me.translation_text( key, parameters );
-					//Replace element's text
-					el.text( t );
+					
+					if( t  ){ //If translation is available
+    					//Replace element's text
+    					el.text( t );
+					}else if( !el.text() ){ //If translation is not available and element is empty
+					    el.text( key );
+					}
 				}
 			});
 
@@ -138,7 +143,7 @@
 		if( !t ){
 			//TODO On missing key add request
 			this.add_key( key );
-			return key;
+			return null;
 		}
 		
 
