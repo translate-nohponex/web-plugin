@@ -26,7 +26,7 @@
 			var me = this;
 
 			//API Request url //TODO ADD API_KEY
-			var api_url = '//translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang +'&api_key=' + this.parameters.API_KEY;
+			var api_url = 'https://translate.nohponex.gr/fetch/listing/?id=' + this.parameters.project_id + '&language=' + lang +'&api_key=' + this.parameters.API_KEY;
 
 			//Check sessionStorage
 			var temp = ( typeof( sessionStorage ) !== 'undefined' ) ? sessionStorage.getItem( api_url ) : null;
@@ -165,7 +165,7 @@
      * @param {string} key
 	 */
 	$.fn.Translate.prototype.add_key = function( key ){
-	    var api_url = '//translate.nohponex.gr/fetch/create/?id=' + this.parameters.project_id +'&api_key=' + this.parameters.API_KEY + '&key=' + key;
+	    var api_url = 'https://translate.nohponex.gr/fetch/create/?id=' + this.parameters.project_id +'&api_key=' + this.parameters.API_KEY + '&key=' + key;
 	    
 	    $.ajax({
 	        type: "POST",
