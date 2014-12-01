@@ -3,7 +3,7 @@
 	$.fn.Translate = function( init ){
 		init = typeof( init ) !== 'undefined' ? init : {};
 
-		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null, translationStorageType : sessionStorage };
+		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null, translationStorageType : sessionStorage, cache_duration : 3600000 };
 
 		//Parse init to parameters
 		for (var k in init ) {
@@ -43,13 +43,30 @@
 				//Parse as json from session storage
 				try {
         			temp = JSON.parse( temp );
+    				
+    				if( !temp.date ){
+    					throw 'date not set';
+    				}
+    				
+					//Time difference in milliseconds
+    				var diff =  ( new Date() - new Date( temp.date ) );
 
-        			this.language = temp.language;
-					this.translation = temp.translation;
+    				//Check strored translation's date
+    				if( diff < this.parameters.cache_duration ){
+    					
+	        			this.language = temp.language;
+						this.translation = temp.translation;
 
-					console.log( 'from cache..' );
+						console.log( 'from cache..' );
 
-					this.translate_page( 'html' );
+						this.translate_page( 'html' );
+					}else{
+						//TODO 
+						localStorage.removeItem( api_url );
+						sessionStorage.removeItem( api_url );
+
+						temp = null;
+					}
         		}catch(e){
         			temp = null;
         		}
