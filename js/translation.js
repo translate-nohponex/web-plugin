@@ -18,7 +18,11 @@
 		this.translation = [];
 		
 		this.api_base = 'https://translate.nohponex.gr/';
-
+        
+        this.call_stack = [];
+        
+        //Missing keys temporary array
+        this.missing_keys = []; 
 		/**
 		  * Initialize 
 		  */
@@ -36,7 +40,9 @@
 			if( !temp && typeof( localStorage ) !== 'undefined' ){
 				temp = localStorage.getItem( api_url ); 
 			}
-
+			
+            this.missing_keys = [];
+            
 			//Use cached translation
 			if( temp ){
 				
@@ -106,7 +112,13 @@
 
 		this.translate_page = function( parent_element ){
 			parent_element = typeof( parent_element ) !== 'undefined' ? parent_element : 'body';
-
+            
+            //If translation is emtpy
+            if( !this.translation.length ){
+                
+                //this.call_stack.push( parent_element );
+            }
+            
 			var translatable_elements = $( parent_element ).find( '[data-i18]');
 			
 			var me = this;
@@ -161,8 +173,17 @@
 
 		//If translation is not set
 		if( !t ){
-			//TODO On missing key add request
-			this.add_key( key );
+
+			//On missing key add request
+			if( this.missing_keys.indexOf( key ) < 0 ){
+
+			     //Add key to missing key list
+			     this.missing_keys.push( key );
+
+			     //Add key to API
+			     this.add_key( key );
+			}
+
 			return null;
 		}
 		
