@@ -11,9 +11,10 @@
 		  	this.parameters[ k ]  = init [ k ];
 		  }
 		}
-
+		console.log( this.parameters.onLoad );
 		//Current language
 		this.language = this.parameters.language;
+
 		//Current translation key : translation
 		this.translation = [];
 		
@@ -22,12 +23,14 @@
         this.call_stack = [];
         
         //Missing keys temporary array
-        this.missing_keys = []; 
+        this.missing_keys = [];
+
 		/**
 		  * Initialize 
 		  */
 		this.initialize = function( lang ){
 			lang = typeof( lang ) !== 'undefined' ? lang : this.parameters.language;
+
 			var me = this;
 
 			//API Request url
@@ -65,6 +68,10 @@
 
 						console.log( 'from cache..' );
 
+						if( this.parameters.onLoad ){
+							this.parameters.onLoad( this );	
+						}
+
 						this.translate_page( 'html' );
 					}else{
 						//TODO 
@@ -95,14 +102,18 @@
 						me.language = data.language;
 						me.translation = data.translation;
 
+						if( me.parameters.onLoad ){
+							me.parameters.onLoad( me );	
+						}
+
 						me.translate_page( 'html' );
 					},
 					error: function( jqXHR, textStatus, errorThrown ){
 						try{
-								console.log( jqXHR );
-								console.log( jqXHR.responseJSON.error );
-								console.log( textStatus );
-								console.log( errorThrown );
+							console.log( jqXHR );
+							console.log( jqXHR.responseJSON.error );
+							console.log( textStatus );
+							console.log( errorThrown );
 						}catch(e){}
 					}
 				});
@@ -139,7 +150,7 @@
 					}
 					var t = me.translation_text( key, parameters );
 					
-					if( t  ){ //If translation is available
+					if( t ){ //If translation is available
     					//Replace element's text
     					el.text( t );
 					}else if( !el.text() ){ //If translation is not available and element is empty
@@ -177,11 +188,11 @@
 			//On missing key add request
 			if( this.missing_keys.indexOf( key ) < 0 ){
 
-			     //Add key to missing key list
-			     this.missing_keys.push( key );
+			    //Add key to missing key list
+			    this.missing_keys.push( key );
 
-			     //Add key to API
-			     this.add_key( key );
+			    //Add key to API
+			    this.add_key( key );
 			}
 
 			return null;
@@ -191,9 +202,9 @@
 		//If parameters are set
 		if( parameters ){
 			for (var k in parameters ) {
-			  if (parameters.hasOwnProperty(k)){
-			  	t = t.replace( '%' + k + '%', parameters[k] );
-			  }
+				if (parameters.hasOwnProperty(k)){
+			  		t = t.replace( '%' + k + '%', parameters[k] );
+			  	}	
 			}
 		}
 		return t;
