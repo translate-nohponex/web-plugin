@@ -1,0 +1,25 @@
+{
+  "name": "translate-nohponex-web-plugin",
+  "version": "0.1",
+  "homepage": "https://github.com/translate-nohponex/web-plugin",
+  "authors": [
+    "NohponeX <NohponeX@gmail.com>"
+  ],
+  "description": "jQuery plugin for translate API",
+  "main": "js/translation.min.js",
+  "keywords": [
+    "localalization"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.1",
+  }
+}
