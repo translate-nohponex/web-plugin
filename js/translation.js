@@ -1,10 +1,12 @@
 (function($) {
-
+	/**
+	  * Translate
+	  */
 	$.fn.Translate = function( init ){
 		init = typeof( init ) !== 'undefined' ? init : {};
 
 		this.parameters = { project_id : null, language : 'en', API_KEY : null, onLoad : null, translationStorageType : sessionStorage, cache_duration : 3600000 };
-
+	
 		//Parse init to parameters
 		for (var k in init ) {
 		  if ( init.hasOwnProperty( k ) && this.parameters.hasOwnProperty( k ) ){

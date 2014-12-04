@@ -1,0 +1,21 @@
+{
+  "name": "translate-nohponex-web",
+  "version": "0.1.0",
+  "homepage": "https://github.com/translate-nohponex/web-plugin",
+  "authors": [
+    "NohponeX <NohponeX@gmail.com>"
+  ],
+  "description": "Javascript SDK for translate-nohponex",
+  "main": "js/translation.js",
+  "keywords": [    
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "demo"
+  ]
+}
