@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title data-i18="title">test</title>
+
+    <link href="css/flag-sprites/flags.css" rel="stylesheet">
     <style>
         body{
             margin-top:50px;
@@ -28,9 +30,9 @@
 </head>
 <body>
     <div>
-        <button type="button" onclick="window.translate.initialize( 'gr' );">Language : gr</button> 
-        <button type="button" onclick="window.translate.initialize( 'en' );">Language : en</button> 
-        <button type="button" onclick="window.translate.initialize( 'de' );">Language : de</button> 
+        <button type="button" onclick="window.translate.initialize( 'gr' );">Language : gr <span class="flag flag-gr"></span></button> 
+        <button type="button" onclick="window.translate.initialize( 'en' );">Language : en <span class="flag flag-en"></span></button> 
+        <button type="button" onclick="window.translate.initialize( 'de' );">Language : de <span class="flag flag-de"></span></button> 
         <hr/>
     </div>
     <div class="container">
@@ -44,8 +46,8 @@
         'weight' translation:
         <span data-i18="weight"></span> <br/>
 
-        'missing' translation:
-        <span data-i18="missing"></span> <br/>
+        'missing_translation' translation:
+        <span data-i18="missing_translation"></span> <br/>
 
 
         'hello' translation using parameters:
@@ -55,24 +57,43 @@
         <h2>Usage-<small data-i18="usage"></small></h2>
         <pre>
             <code>
-    &lt;span data-i18=&quot;weight&quot;&gt;&lt;/span&gt;
+&lt;span data-i18=&quot;weight&quot;&gt;&lt;/span&gt;
 
-    &lt;span data-i18=&quot;hello&quot; data-i18-data=&#39;{&quot;username&quot;:&quot;nohponex&quot;, &quot;email&quot; : &quot;nohponex@gmail.com&quot;}&#39;&gt;&lt;/span&gt;        </code>
+&lt;span data-i18=&quot;hello&quot; data-i18-data=&#39;{&quot;username&quot;:&quot;nohponex&quot;, &quot;email&quot; : &quot;nohponex@gmail.com&quot;}&#39;&gt;&lt;/span&gt;        </code>
+        </pre>
+        <h2>From javascript</h2>
+        <pre>
+            <code>
+var onLoad = function ( ){
+    console.log( window.translate.translation_text( 'usage' ) );
+    console.log( window.translate.translation_text( 'hello', {"username":"nohponex", "email" : "nohponex@gmail.com"} ) );
+}
+//Initialize
+$(function() {
+    window.translate = new $.fn.Translate( 
+        { project_id : 1, language : 'gr', API_KEY : 'API_KEY', cache_duration:10000, onLoad : onLoad }
+    );
+});         </code>
         </pre>
     </div>
     <script src="//code.jquery.com/jquery-2.1.1.min.js" type="text/javascript"></script>
-    <script src="js/translation.js" type="text/javascript"></script>
+    <script src="..//js/translation.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(function() {
-        
 
         /*var f= function ( t ){
             var team_translation = t.translation_text( 'team' );
             console.log( team_translation );
         }*/
-        f = null;
+         var onLoad = function (){
+            console.log( window.translate.translation_text( 'usage' ) );
+            console.log( window.translate.translation_text( 'hello', {"username":"nohponex", "email" : "nohponex@gmail.com"} ) );
+        }
+
         //Translate this page on load in greek language
-        window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', API_KEY : '59f1cbb3bee39038d74e9d043daf016a', onLoad : f, cache_duration:10000 } );
+        window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', API_KEY : '59f1cbb3bee39038d74e9d043daf016a', cache_duration:10000, onLoad : onLoad } );
+
+
         //translate.initialize( );
     });
     </script>
