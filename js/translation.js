@@ -164,7 +164,7 @@
 			});
 			
 			//Replace all data-i18-title
-			var translatable_elements = $( parent_element ).find( '[data-i18-title]');
+			translatable_elements = $( parent_element ).find( '[data-i18-title]');
 			translatable_elements.each(function( index, element ) {
 				//Get element object
 				var el = $( element );
