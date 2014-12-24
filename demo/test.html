@@ -49,7 +49,9 @@
         'missing_translation' translation:
         <span data-i18="missing_translation"></span> <br/>
 
-
+        'this_is_my_title' using title
+        <span data-i18-title="this_is_my_title" title="This is my title">Hover me</span><br/>
+        
         'hello' translation using parameters:
         <span data-i18="hello" data-i18-data='{"username":"nohponex", "email" : "nohponex@gmail.com"}'></span> <br/>
     </div>
@@ -88,7 +90,7 @@ $(function() {
          var onLoad = function (){
             console.log( window.translate.translation_text( 'usage' ) );
             console.log( window.translate.translation_text( 'hello', {"username":"nohponex", "email" : "nohponex@gmail.com"} ) );
-        }
+        };
 
         //Translate this page on load in greek language
         window.translate = new $.fn.Translate( { project_id : 1, language : 'gr', API_KEY : '59f1cbb3bee39038d74e9d043daf016a', cache_duration:10000, onLoad : onLoad } );

@@ -132,9 +132,11 @@
                 //this.call_stack.push( parent_element );
             }
             
-			var translatable_elements = $( parent_element ).find( '[data-i18]');
+			
 			
 			var me = this;
+			var translatable_elements = $( parent_element ).find( '[data-i18]');
+			
 			//Replace all keys with the translated values
 			translatable_elements.each(function( index, element ) {
 				//Get element object
@@ -160,7 +162,27 @@
 					}
 				}
 			});
-
+			
+			//Replace all data-i18-title
+			var translatable_elements = $( parent_element ).find( '[data-i18-title]');
+			translatable_elements.each(function( index, element ) {
+				//Get element object
+				var el = $( element );
+				//Get elements key
+				var key = el.attr( 'data-i18-title' );
+				
+				if( key ){
+					var t = me.translation_text( key );
+				
+					if( t ){ //If translation is available
+    					//Replace element's text
+    					el.attr( 'title', t );
+					}else if( !el.attr( 'title' ) ){ //If translation is not available and element is empty
+					    el.attr( 'title', key );
+					}
+				}
+			});
+			
 			//Replace all language key data-i18-lang
 			var translatable_language_elements = $( parent_element ).find( '[data-i18-lang]' );
 			translatable_language_elements.each(function( index, element ) {
