@@ -148,9 +148,13 @@
 													
 					//Translation parameters
 					var parameters = null;
-					if( el.attr( 'data-i18-data' ) ){
-						//Parse string as json object
-						parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
+					try{
+						if( el.attr( 'data-i18-data' ) ){
+							//Parse string as json object
+							parameters = jQuery.parseJSON( el.attr( 'data-i18-data' ) );
+						}
+					}catch(err) {
+						parameters = null;
 					}
 					var t = me.translation_text( key, parameters );
 					
