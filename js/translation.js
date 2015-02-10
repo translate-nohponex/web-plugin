@@ -169,23 +169,23 @@
 			
 			var translatable_attributes = [ 'title', 'placeholder' ];
             
-            translatable_attributes.forEach( function( attr ){
+            translatable_attributes.forEach( function( attribute ){
                 //Replace all 
-                translatable_elements = $( parent_element ).find( 'data-i18-' + attr );
+                translatable_elements = $( parent_element ).find( '[data-i18-' + attribute + ']' );
                 translatable_elements.each(function( index, element ) {
                     //Get element object
                     var el = $( element );
                     //Get elements key
-                    var key = el.attr( 'data-i18-' + atrr );
+                    var key = el.attr( 'data-i18-' + attribute );
 
                     if( key ){
                         var t = me.translation_text( key );
 
                         if( t ){ //If translation is available
                             //Replace element's text
-                            el.attr( atrr, t );
-                        }else if( !el.attr( attr ) ){ //If translation is not available and element is empty
-                            el.attr( attr, key );
+                            el.attr( attribute, t );
+                        }else if( !el.attr( attribute ) ){ //If translation is not available and element is empty
+                            el.attr( attribute, key );
                         }
                     }
                 });
