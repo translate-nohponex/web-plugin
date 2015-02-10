@@ -163,25 +163,29 @@
 				}
 			});
 			
-			//Replace all data-i18-title
-			translatable_elements = $( parent_element ).find( '[data-i18-title]');
-			translatable_elements.each(function( index, element ) {
-				//Get element object
-				var el = $( element );
-				//Get elements key
-				var key = el.attr( 'data-i18-title' );
-				
-				if( key ){
-					var t = me.translation_text( key );
-				
-					if( t ){ //If translation is available
-    					//Replace element's text
-    					el.attr( 'title', t );
-					}else if( !el.attr( 'title' ) ){ //If translation is not available and element is empty
-					    el.attr( 'title', key );
-					}
-				}
-			});
+			var translatable_attributes = [ 'title', 'placeholder' ];
+            
+            translatable_attributes.forEach( function( attr ){
+                //Replace all 
+                translatable_elements = $( parent_element ).find( 'data-i18-' + attr );
+                translatable_elements.each(function( index, element ) {
+                    //Get element object
+                    var el = $( element );
+                    //Get elements key
+                    var key = el.attr( 'data-i18-' + atrr );
+
+                    if( key ){
+                        var t = me.translation_text( key );
+
+                        if( t ){ //If translation is available
+                            //Replace element's text
+                            el.attr( atrr, t );
+                        }else if( !el.attr( attr ) ){ //If translation is not available and element is empty
+                            el.attr( attr, key );
+                        }
+                    }
+                });
+            });
 			
 			//Replace all language key data-i18-lang
 			var translatable_language_elements = $( parent_element ).find( '[data-i18-lang]' );
